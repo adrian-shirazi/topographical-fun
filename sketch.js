@@ -19,10 +19,8 @@ function setup() {
     for (let y = 0; y < rows; y++) {
       let noiseVal = noise(x * smoothness, y * smoothness);
       terrain[x][y] = noiseVal;
-      let c = map(noiseVal, 0, 1, 30, 240);
-      fill(c);
-      noStroke();
-      square(x * scale, y * scale, scale);
+      rect(x * scale * 2, y * scale * 2, scale * 2, scale * 2);
+      text(noiseVal.toFixed(2), x * scale * 2, y * scale * 2);
     }
   }
 }
