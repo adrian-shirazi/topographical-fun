@@ -1,7 +1,6 @@
-let scale = 4;
+let scale = 8;
 let terrain = [];
 let cols, rows;
-let isovalue = 0.5;
 let seed = null;
 
 function setup() {
@@ -18,9 +17,9 @@ function setup() {
 
   cols = width / scale;
   rows = height / scale;
-  const frequency = 0.01;
+  const frequency = 0.016;
   create2dScalarField(frequency);
-  for (let iso = 0.0; iso < 1; iso += 0.05) {
+  for (let iso = 0.04; iso < 1; iso += 0.04) {
     let color = lerpColor(lowColor, highColor, iso);
     drawContours(iso, color);
   }
