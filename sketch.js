@@ -1,7 +1,7 @@
 let terrain;
 
 function setup() {
-  createCanvas(800, 800);
+  createCanvas(400, 400);
   background(255);
   terrain = new ScalarField(20, 0.2); // scale, frequency
   terrain.generate();
@@ -30,7 +30,7 @@ class ScalarField {
 
   render() {
     textAlign(CENTER, CENTER);
-    textSize(10);
+    textSize(5);
     for (let x = 0; x < this.cols; x++) {
       for (let y = 0; y < this.rows; y++) {
         let val = this.grid[x][y];
