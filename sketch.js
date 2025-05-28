@@ -1,4 +1,4 @@
-let scale = 10;
+let scale = 4;
 let terrain = [];
 let cols, rows;
 let isovalue = 0.5;
@@ -16,7 +16,7 @@ function setup() {
 
   cols = width / scale;
   rows = height / scale;
-  const frequency = 0.1;
+  const frequency = 0.01;
   create2dScalarField(frequency);
   for (let iso = 0.1; iso < 1; iso += 0.1) {
     drawContours(iso, iso * 333);
