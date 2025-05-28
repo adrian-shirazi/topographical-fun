@@ -1,46 +1,50 @@
+let terrain;
+
 function setup() {
-  // Create canvas
-  const width = 800;
-  const height = 800;
-  createCanvas(width, height);
-  const scale = 20; // Controls resolution
-  const backgroundColor = "#FFFFFF";
-  const lineColor = "#000000";
-  // Would be kind of dope to have a gradient (ie darker = higher, lighter = base)
-  let terrain = [];
-  const frequency = 0.2; // Controls how extreme the terrain is
+  createCanvas(800, 800);
+  background(255);
+  terrain = new ScalarField(20, 0.2); // scale, frequency
+  terrain.generate();
+  terrain.render();
+  noLoop();
+}
 
-  create2dScalarField(width, height, frequency);
+class ScalarField {
+  constructor(scale, frequency) {
+    this.scale = scale;
+    this.frequency = frequency;
+    this.cols = width / scale;
+    this.rows = height / scale;
+    this.grid = [];
+  }
 
-  /**
-   * Randomly creates a 2d array of floating point values between 0 and 1
-   * @param width - width of canvas
-   * @param height - height of canvas
-   * @param frequency - How extreme the terrain is
-   */
-  function create2dScalarField(width, height, frequency) {
-    const cols = width / scale;
-    const rows = height / scale;
-
-    for (let x = 0; x < cols; x++) {
-      terrain[x] = [];
-      for (let y = 0; y < rows; y++) {
-        let noiseLevel = noise(x * frequency, y * frequency);
-        terrain[x][y] = noiseLevel;
-        drawCell(x, y, scale, noiseLevel);
+  generate() {
+    for (let x = 0; x < this.cols; x++) {
+      this.grid[x] = [];
+      for (let y = 0; y < this.rows; y++) {
+        let n = noise(x * this.frequency, y * this.frequency);
+        this.grid[x][y] = n;
       }
     }
   }
 
-  /**
-   * Draws a cell with the noiseLevel in it (used for visualizing)
-   * @param x - x coord
-   * @param y - y coord
-   * @param scale - Controls resultion
-   * @param noiseLevel - Perlin noise value
-   */
-  function drawCell(x, y, scale, noiseLevel) {
-    rect(x * scale * 2, y * scale * 2, scale * 2, scale * 2);
-    text(noiseLevel.toFixed(2), x * scale * 2, y * scale * 2);
+  render() {
+    textAlign(CENTER, CENTER);
+    textSize(10);
+    for (let x = 0; x < this.cols; x++) {
+      for (let y = 0; y < this.rows; y++) {
+        let val = this.grid[x][y];
+        let xPos = x * this.scale;
+        let yPos = y * this.scale;
+
+        stroke(180);
+        noFill();
+        rect(xPos, yPos, this.scale, this.scale);
+
+        noStroke();
+        fill(0);
+        text(val.toFixed(2), xPos + this.scale / 2, yPos + this.scale / 2);
+      }
+    }
   }
 }
