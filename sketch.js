@@ -2,8 +2,12 @@ let scale = 20;
 let terrain = [];
 let cols, rows;
 let isovalue = 0.5;
+let seed = 2;
 
 function setup() {
+  if (seed != null) {
+    noiseSeed(seed);
+  }
   createCanvas(800, 800);
   background(255);
   textAlign(CENTER, CENTER);
