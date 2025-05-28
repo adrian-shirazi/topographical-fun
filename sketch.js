@@ -1,4 +1,4 @@
-let scale = 20;
+let scale = 10;
 let terrain = [];
 let cols, rows;
 let isovalue = 0.5;
@@ -16,10 +16,10 @@ function setup() {
 
   cols = width / scale;
   rows = height / scale;
-  const frequency = 0.08;
+  const frequency = 0.1;
   create2dScalarField(frequency);
   for (let iso = 0.1; iso < 1; iso += 0.1) {
-    drawContours(iso);
+    drawContours(iso, iso * 333);
   }
   noLoop();
 }
@@ -99,8 +99,8 @@ function interpolate(p1, p2, v1, v2, iso) {
   return p5.Vector.lerp(p1, p2, t);
 }
 
-function drawContours(isovalue) {
-  stroke(0);
+function drawContours(isovalue, color) {
+  stroke(color);
   strokeWeight(2);
 
   for (let x = 0; x < cols - 1; x++) {
