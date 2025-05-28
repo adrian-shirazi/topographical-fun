@@ -12,9 +12,11 @@ function setup() {
 
   cols = width / scale;
   rows = height / scale;
-  const frequency = 0.2;
+  const frequency = 0.08;
   create2dScalarField(frequency);
-  drawContours(0.5);
+  for (let iso = 0.1; iso < 1; iso += 0.1) {
+    drawContours(iso);
+  }
   noLoop();
 }
 
