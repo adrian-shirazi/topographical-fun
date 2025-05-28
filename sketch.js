@@ -2,9 +2,11 @@ let scale = 4;
 let terrain = [];
 let cols, rows;
 let isovalue = 0.5;
-let seed = 2;
+let seed = null;
 
 function setup() {
+  let lowColor = color(20, 60, 20);
+  let highColor = color(150, 255, 150);
   if (seed != null) {
     noiseSeed(seed);
   }
@@ -18,8 +20,9 @@ function setup() {
   rows = height / scale;
   const frequency = 0.01;
   create2dScalarField(frequency);
-  for (let iso = 0.1; iso < 1; iso += 0.1) {
-    drawContours(iso, iso * 333);
+  for (let iso = 0.0; iso < 1; iso += 0.05) {
+    let color = lerpColor(lowColor, highColor, iso);
+    drawContours(iso, color);
   }
   noLoop();
 }
@@ -101,7 +104,7 @@ function interpolate(p1, p2, v1, v2, iso) {
 
 function drawContours(isovalue, color) {
   stroke(color);
-  strokeWeight(2);
+  strokeWeight(4);
 
   for (let x = 0; x < cols - 1; x++) {
     for (let y = 0; y < rows - 1; y++) {
