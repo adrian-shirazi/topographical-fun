@@ -73,22 +73,24 @@ const caseTable = {
   14: [["CD", "DA"]],
 };
 
-function getMidpoints(x, y) {
+function getInterpolatedEdges(x, y, a, b, c, d, isovalue) {
   let A = createVector(x * scale, y * scale);
   let B = createVector((x + 1) * scale, y * scale);
   let C = createVector((x + 1) * scale, (y + 1) * scale);
   let D = createVector(x * scale, (y + 1) * scale);
 
   return {
-    A,
-    B,
-    C,
-    D,
-    AB: p5.Vector.lerp(A, B, 0.5),
-    BC: p5.Vector.lerp(B, C, 0.5),
-    CD: p5.Vector.lerp(C, D, 0.5),
-    DA: p5.Vector.lerp(D, A, 0.5),
+    AB: interpolate(A, B, a, b, isovalue),
+    BC: interpolate(B, C, b, c, isovalue),
+    CD: interpolate(C, D, c, d, isovalue),
+    DA: interpolate(D, A, d, a, isovalue),
   };
+}
+
+function interpolate(p1, p2, v1, v2, iso) {
+  let t = (iso - v1) / (v2 - v1);
+  t = constrain(t, 0, 1); // In case v1 == v2
+  return p5.Vector.lerp(p1, p2, t);
 }
 
 function drawContours(isovalue) {
@@ -97,14 +99,19 @@ function drawContours(isovalue) {
 
   for (let x = 0; x < cols - 1; x++) {
     for (let y = 0; y < rows - 1; y++) {
-      let a = terrain[x][y] >= isovalue ? 1 : 0;
-      let b = terrain[x + 1][y] >= isovalue ? 1 : 0;
-      let c = terrain[x + 1][y + 1] >= isovalue ? 1 : 0;
-      let d = terrain[x][y + 1] >= isovalue ? 1 : 0;
+      let aVal = terrain[x][y];
+      let bVal = terrain[x + 1][y];
+      let cVal = terrain[x + 1][y + 1];
+      let dVal = terrain[x][y + 1];
+
+      let a = aVal >= isovalue ? 1 : 0;
+      let b = bVal >= isovalue ? 1 : 0;
+      let c = cVal >= isovalue ? 1 : 0;
+      let d = dVal >= isovalue ? 1 : 0;
 
       let cellIndex = (a << 3) | (b << 2) | (c << 1) | d;
 
-      let m = getMidpoints(x, y);
+      let m = getInterpolatedEdges(x, y, aVal, bVal, cVal, dVal, isovalue);
 
       let caseLines = caseTable[cellIndex];
       if (!caseLines) continue;
